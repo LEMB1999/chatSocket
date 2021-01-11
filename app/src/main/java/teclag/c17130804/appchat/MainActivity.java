@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private View Datos;
     EditText Servidor,Usuario,mensaje;
-    TextView chat;
+    LinearLayout chat;
 
     String strServidor,strUsuario;
 
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnSend = findViewById(R.id.btnSend);
         btnSend.setOnClickListener(v -> {
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -69,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
                         output.write(strUsuario + ":" + Message);
                         output.flush();
                         client.close();
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TextView txtMensaje = new TextView(MainActivity.this);
+                                txtMensaje.setText(Message);
+                                txtMensaje.setGravity(Gravity.RIGHT);
+                                txtMensaje.setTextSize(20);
+                                chat.addView(txtMensaje);
+                            }
+                        });
+
                     } catch (IOException e) {
                         e.printStackTrace();
                         runOnUiThread(new Runnable() {
@@ -119,7 +134,11 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                chat.append(mensaje+"\n");
+                                TextView txtMensaje = new TextView(MainActivity.this);
+                                txtMensaje.setText(mensaje);
+                                txtMensaje.setTextSize(20);
+                                txtMensaje.setGravity(Gravity.LEFT);
+                                chat.addView(txtMensaje);
                             }
                         });
                     }
@@ -130,9 +149,5 @@ public class MainActivity extends AppCompatActivity {
              }
         }
     }
-
-
-
-
 
 }//cierre de la clase principal
