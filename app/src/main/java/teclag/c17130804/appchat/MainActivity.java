@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
                                 txtMensaje.setGravity(Gravity.RIGHT);
                                 txtMensaje.setTextSize(20);
                                 chat.addView(txtMensaje);
+                                mensaje.setText("");
+                                mensaje.requestFocus();
                             }
                         });
 
